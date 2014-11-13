@@ -11,13 +11,77 @@
 #include <limits.h>
 #include "lfsr.h"
 
+#define MAX_SIZE 1024
+
+/**
+ * Compute Berlekamp-Massey Algorithm for the given binary sequence.
+ * Return the linear complexity and store the LFSR descriptor in the
+ * given array as a string.
+ */
+int bma(char sequence[], char desc[]) {
+	int n = strlen(sequence);
+	int seq_len = n * sizeof(int);
+	int L = 0;
+	int m = -1;
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	int B_shift;
+	int delta;
+	int digit;
+	int *C = (int *)malloc(seq_len);
+	int *B = (int *)malloc(seq_len);
+	int *T = (int *)malloc(seq_len);
+
+	if (C == NULL || B == NULL || T == NULL) {
+		printf("Malloc error\n");
+		return -1;
+	}
+
+	memset(C, 0, seq_len);
+	memset(B, 0, seq_len);
+	memset(T, 0, seq_len);
+
+	while (i < n) {
+		delta = 0;
+		for (j = i; j >= i - L; j--) {
+			digit = (sequence[i] == '0')? 0 : 1;
+			delta += digit * C[i];
+		}
+		if (delta == 1) {
+			memcpy(T, C, seq_len);
+			B_shift = i - m;
+			// We have to xor each element of C with each element of B shifted by B_shift positions right
+			for (k = 0; k < n - B_shift; k++) {
+				// We need to start xoring from the B_shiftth element
+				C[k + B_shift] ^= B[k]; 
+			}
+			if (L <= i/2) {
+				L = i + 1 - L;
+				m = i;
+				memcpy(B, T, seq_len);
+			}
+		}
+		i++;
+	}
+	memcpy(desc, C, seq_len);
+	free(C);
+	free(B);
+	free(T);
+	return L;
+}
+
 void usage(char *name) {
 	// TODO
 }
 
 
 int main(int argc, char *argv[]) {
-	// TODO
+
+	char *output_sequence = argv[1];
+	char desc[MAX_SIZE];
+
+	printf("%d\n", bma(output_sequence, desc));
 
 	return 0;
 }
