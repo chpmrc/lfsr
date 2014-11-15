@@ -20,7 +20,7 @@
  */
 int bma(char sequence[], char desc[]) {
 	int n = strlen(sequence);
-	int seq_len = n * sizeof(int);
+	int poly_len = n + 1;
 	int L = 0;
 	int m = -1;
 	int i = 0;
@@ -29,42 +29,54 @@ int bma(char sequence[], char desc[]) {
 	int B_shift;
 	int delta;
 	int digit;
-	int *C = (int *)malloc(seq_len);
-	int *B = (int *)malloc(seq_len);
-	int *T = (int *)malloc(seq_len);
+	int *C = (int *)malloc(poly_len * sizeof(int));
+	int *B = (int *)malloc(poly_len * sizeof(int));
+	int *T = (int *)malloc(poly_len * sizeof(int));
 
 	if (C == NULL || B == NULL || T == NULL) {
 		printf("Malloc error\n");
 		return -1;
 	}
-
-	memset(C, 0, seq_len);
-	memset(B, 0, seq_len);
-	memset(T, 0, seq_len);
-
+	memset(C, 0, poly_len * sizeof(int));
+	memset(B, 0, poly_len * sizeof(int));
+	memset(T, 0, poly_len * sizeof(int));
+	C[1] = B[1] = 1;
 	while (i < n) {
-		delta = 0;
-		for (j = i; j >= i - L; j--) {
-			digit = (sequence[i] == '0')? 0 : 1;
-			delta += digit * C[i];
+		printf("Step %d ------------\n", i);
+		printf("L = %d, m = %d\n", L, m);
+		delta = (sequence[i] == '0')? 0 : 1;
+		// printf("\tComputing delta using: \n\t\ts%d\n", i);
+		for (j = i - 1, k = 1; j >= i - L; j--) {
+			digit = (sequence[j] == '0')? 0 : 1;
+			// printf("\t\ts%d + C[%d]\n", j, k);
+			delta ^= digit * C[k];
+			k++;
 		}
+		printf("\n");
+		printf("Delta: %d\n", delta);
 		if (delta == 1) {
-			memcpy(T, C, seq_len);
+			memcpy(T, C, poly_len * sizeof(int));
 			B_shift = i - m;
 			// We have to xor each element of C with each element of B shifted by B_shift positions right
-			for (k = 0; k < n - B_shift; k++) {
+			for (k = 0; k < poly_len - B_shift; k++) {
 				// We need to start xoring from the B_shiftth element
 				C[k + B_shift] ^= B[k]; 
 			}
 			if (L <= i/2) {
 				L = i + 1 - L;
 				m = i;
-				memcpy(B, T, seq_len);
+				memcpy(B, T, poly_len * sizeof(int));
 			}
 		}
+		printf("\n\n");
 		i++;
 	}
-	memcpy(desc, C, seq_len);
+
+	// We want a string at the end
+	for (i = 1; i <= poly_len; i++) {
+		desc[i - 1] = (C[i] == 0)? '0' : '1';
+	}
+	desc[n] = '\0';
 	free(C);
 	free(B);
 	free(T);
@@ -80,8 +92,10 @@ int main(int argc, char *argv[]) {
 
 	char *output_sequence = argv[1];
 	char desc[MAX_SIZE];
+	memset(desc, 0, MAX_SIZE * sizeof(char));
 
 	printf("%d\n", bma(output_sequence, desc));
+	printf("%s\n", desc);
 
 	return 0;
 }
