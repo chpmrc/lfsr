@@ -13,73 +13,79 @@
 
 #define MAX_SIZE 1024
 
+char c2b(char c) {
+	return (c == '0')? 0 : 1;
+}
+
+void get_poly_str(int poly[], int n, char buffer[]) {
+	int i = 0;
+	char final[1024] = {0};
+	sprintf(final, "%s%d", final, poly[0]);
+	for (i = 1; i < n; ++i)
+	{
+		if (poly[i] == 1) {
+			sprintf(final, "%s + ", final);
+			sprintf(final, "%sx^%d", final, i);
+		}
+	}
+	sprintf(final, "%s%c", final, '\0');
+	// printf("%s\n", final);
+	memcpy(buffer, final, n);
+}
+
 /**
  * Compute Berlekamp-Massey Algorithm for the given binary sequence.
  * Return the linear complexity and store the LFSR descriptor in the
  * given array as a string.
  */
-int bma(char sequence[], char desc[]) {
-	int n = strlen(sequence);
-	int poly_len = n + 1;
-	int L = 0;
-	int m = -1;
-	int i = 0;
-	int j = 0;
-	int k = 0;
-	int B_shift;
-	int delta;
-	int digit;
-	int *C = (int *)malloc(poly_len * sizeof(int));
-	int *B = (int *)malloc(poly_len * sizeof(int));
-	int *T = (int *)malloc(poly_len * sizeof(int));
+int bma(int sequence[], int desc[], int n) {
+	int size_n = n * sizeof(int); // You never know!
+	int C[n], B[n], T[n];
+	int L, m, i, delta; // Main variables of the algorithm
+	int j, k, B_shift; // Auxiliary variables
+	char C_str[1024], B_str[1024];
 
-	if (C == NULL || B == NULL || T == NULL) {
-		printf("Malloc error\n");
-		return -1;
-	}
-	memset(C, 0, poly_len * sizeof(int));
-	memset(B, 0, poly_len * sizeof(int));
-	memset(T, 0, poly_len * sizeof(int));
-	C[1] = B[1] = 1;
+	memset(C, 0, size_n);
+	memset(B, 0, size_n);
+	memset(T, 0, size_n);
+
+	C[0] = B[0] = 1;
+	L = 0;
+	m = -1;
+	i = 0;
+
 	while (i < n) {
-		printf("Step %d ------------\n", i);
-		printf("L = %d, m = %d\n", L, m);
-		delta = (sequence[i] == '0')? 0 : 1;
-		// printf("\tComputing delta using: \n\t\ts%d\n", i);
-		for (j = i - 1, k = 1; j >= i - L; j--) {
-			digit = (sequence[j] == '0')? 0 : 1;
-			// printf("\t\ts%d + C[%d]\n", j, k);
-			delta ^= digit * C[k];
-			k++;
+		get_poly_str(C, n, C_str);
+		get_poly_str(B, n, B_str);
+		// Compute delta as (s(i) + c1*s(i-1) + ... + cL*s(i-L))
+		printf("Delta init to s%d\n", i);
+		delta = sequence[i];
+		// printf("First value of delta: %d\n", delta);
+		for (j = 1; j <= L; ++j)
+		{
+			delta  ^= sequence[i - j] * C[j - 1];
+			printf("Adding s%d * C[%d]\n", i-j, j - 1);
 		}
-		printf("\n");
-		printf("Delta: %d\n", delta);
+		printf("Step %d:\n\tC(x) = %s\n\tL = %d, m = %d\n\tB(x) = %s\n\ti = %d\n\tdelta = %d\n", i, C_str, L, m, B_str, i, delta);
 		if (delta == 1) {
-			memcpy(T, C, poly_len * sizeof(int));
+			memcpy(T, C, size_n);
 			B_shift = i - m;
 			// We have to xor each element of C with each element of B shifted by B_shift positions right
-			for (k = 0; k < poly_len - B_shift; k++) {
+			for (k = 0; k < n - B_shift; k++) {
 				// We need to start xoring from the B_shiftth element
 				C[k + B_shift] ^= B[k]; 
 			}
 			if (L <= i/2) {
 				L = i + 1 - L;
 				m = i;
-				memcpy(B, T, poly_len * sizeof(int));
+				memcpy(B, T, size_n);
 			}
 		}
-		printf("\n\n");
 		i++;
 	}
 
 	// We want a string at the end
-	for (i = 1; i <= poly_len; i++) {
-		desc[i - 1] = (C[i] == 0)? '0' : '1';
-	}
-	desc[n] = '\0';
-	free(C);
-	free(B);
-	free(T);
+	memcpy(desc, C, size_n);
 	return L;
 }
 
@@ -89,12 +95,29 @@ void usage(char *name) {
 
 
 int main(int argc, char *argv[]) {
-
 	char *output_sequence = argv[1];
+	int output_sequence_int[MAX_SIZE];
+	int desc_int[MAX_SIZE];
 	char desc[MAX_SIZE];
-	memset(desc, 0, MAX_SIZE * sizeof(char));
+	int i, n = 0, l;
 
-	printf("%d\n", bma(output_sequence, desc));
+	memset(desc_int, 0, MAX_SIZE * sizeof(int));
+	memset(output_sequence_int, 0, MAX_SIZE * sizeof(int));
+
+	// Convert sequence into an array of ints
+	for (i = 0; output_sequence[i] != '\0'; i++) {
+		output_sequence_int[i] = c2b(output_sequence[i]);
+		n++;
+	}
+	// Compute BMA
+	l = bma(output_sequence_int, desc_int, n);
+	// Convert description polynomial into a string
+	for (i = 0; i < n; ++i)
+	{
+		desc[i] = (desc_int[i] == 0)? '0' : '1';
+	}
+
+	printf("%d\n", l);
 	printf("%s\n", desc);
 
 	return 0;
