@@ -18,6 +18,11 @@ void circular_shift_right(char arr[]);
 
 void get_lfsr_output(LFSR *lfsr_in, char *lfsr_output, int howmany);
 
+char c2b(char c);
+
+void get_poly_str(int poly[], int n, char buffer[]);
+
 int bma(int sequence[], int desc[], int n);
+
 
 #endif

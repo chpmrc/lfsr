@@ -13,39 +13,24 @@
 
 #define MAX_SIZE 1024
 
-char c2b(char c) {
-	return (c == '0')? 0 : 1;
-}
-
-void get_poly_str(int poly[], int n, char buffer[]) {
-	int i = 0;
-	char final[1024] = {0};
-	sprintf(final, "%s%d", final, poly[0]);
-	for (i = 1; i < n; ++i)
-	{
-		if (poly[i] == 1) {
-			sprintf(final, "%s + ", final);
-			sprintf(final, "%sx^%d", final, i);
-		}
-	}
-	sprintf(final, "%s%c", final, '\0');
-	// printf("%s\n", final);
-	memcpy(buffer, final, n);
-}
-
-
 
 void usage(char *name) {
-	// TODO
+	printf("Given the key stream of a LFSR detect the connection polynomial and its length using Berlekamp-Massey algorithm.\nUsage: ");
+	printf("%s BINARY_KEYSTREAM\n", name);
 }
-
 
 int main(int argc, char *argv[]) {
 	char *output_sequence = argv[1];
 	int output_sequence_int[MAX_SIZE];
 	int desc_int[MAX_SIZE];
 	char desc[MAX_SIZE];
+	char desc_poly[MAX_SIZE];
 	int i, n = 0, l;
+
+	if (argc != 2) {
+		usage(argv[0]);
+		return 1;
+	}
 
 	memset(desc_int, 0, MAX_SIZE * sizeof(int));
 	memset(output_sequence_int, 0, MAX_SIZE * sizeof(int));
@@ -58,13 +43,15 @@ int main(int argc, char *argv[]) {
 	// Compute BMA
 	l = bma(output_sequence_int, desc_int, n);
 	// Convert description polynomial into a string
-	for (i = 0; i < n; ++i)
+	for (i = 0; i < l + 1; ++i)
 	{
 		desc[i] = (desc_int[i] == 0)? '0' : '1';
 	}
+	desc[i] = '\0';
 
-	printf("%d\n", l);
-	printf("%s\n", desc);
+	printf("Length: %d\n", l);
+	get_poly_str(desc_int, strlen(desc), desc_poly);
+	printf("Connection polynomial: %s (binary: %s)\n", desc_poly, desc);
 
 	return 0;
 }

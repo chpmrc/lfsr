@@ -69,6 +69,26 @@ void get_lfsr_output(LFSR *lfsr_in, char *lfsr_output, int howmany) {
 	lfsr_output[j] = '\0';
 }
 
+char c2b(char c) {
+	return (c == '0')? 0 : 1;
+}
+
+void get_poly_str(int poly[], int n, char buffer[]) {
+	int i = 0;
+	char final[1024] = {0};
+	sprintf(final, "%s%d", final, poly[0]);
+	for (i = 1; i < n; ++i)
+	{
+		if (poly[i] == 1) {
+			sprintf(final, "%s + ", final);
+			sprintf(final, "%sx^%d", final, i);
+		}
+	}
+	sprintf(final, "%s%c", final, '\0');
+	// printf("%s\n", final);
+	memcpy(buffer, final, n);
+}
+
 /**
  * Compute Berlekamp-Massey Algorithm for the given binary sequence.
  * Return the linear complexity and store the LFSR descriptor in the
@@ -94,15 +114,15 @@ int bma(int sequence[], int desc[], int n) {
 		get_poly_str(C, n, C_str);
 		get_poly_str(B, n, B_str);
 		// Compute delta as (s(i) + c1*s(i-1) + ... + cL*s(i-L))
-		printf("Delta init to s%d\n", i);
+		// printf("Delta init to s%d\n", i);
 		delta = sequence[i];
 		// printf("First value of delta: %d\n", delta);
 		for (j = 1; j <= L; ++j)
 		{
 			delta  ^= sequence[i - j] * C[j];
-			printf("Adding s%d * C[%d]\n", i-j, j - 1);
+			// printf("Adding s%d * C[%d]\n", i-j, j - 1);
 		}
-		printf("Step %d:\n\tC(x) = %s\n\tL = %d, m = %d\n\tB(x) = %s\n\ti = %d\n\tdelta = %d\n", i, C_str, L, m, B_str, i, delta);
+		// printf("Step %d:\n\tC(x) = %s\n\tL = %d, m = %d\n\tB(x) = %s\n\ti = %d\n\tdelta = %d\n", i, C_str, L, m, B_str, i, delta);
 		if (delta == 1) {
 			memcpy(T, C, size_n);
 			B_shift = i - m;
@@ -124,3 +144,4 @@ int bma(int sequence[], int desc[], int n) {
 	memcpy(desc, C, size_n);
 	return L;
 }
+
