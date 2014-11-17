@@ -33,61 +33,7 @@ void get_poly_str(int poly[], int n, char buffer[]) {
 	memcpy(buffer, final, n);
 }
 
-/**
- * Compute Berlekamp-Massey Algorithm for the given binary sequence.
- * Return the linear complexity and store the LFSR descriptor in the
- * given array as a string.
- */
-int bma(int sequence[], int desc[], int n) {
-	int size_n = n * sizeof(int); // You never know!
-	int C[n], B[n], T[n];
-	int L, m, i, delta; // Main variables of the algorithm
-	int j, k, B_shift; // Auxiliary variables
-	char C_str[1024], B_str[1024];
 
-	memset(C, 0, size_n);
-	memset(B, 0, size_n);
-	memset(T, 0, size_n);
-
-	C[0] = B[0] = 1;
-	L = 0;
-	m = -1;
-	i = 0;
-
-	while (i < n) {
-		get_poly_str(C, n, C_str);
-		get_poly_str(B, n, B_str);
-		// Compute delta as (s(i) + c1*s(i-1) + ... + cL*s(i-L))
-		printf("Delta init to s%d\n", i);
-		delta = sequence[i];
-		// printf("First value of delta: %d\n", delta);
-		for (j = 1; j <= L; ++j)
-		{
-			delta  ^= sequence[i - j] * C[j - 1];
-			printf("Adding s%d * C[%d]\n", i-j, j - 1);
-		}
-		printf("Step %d:\n\tC(x) = %s\n\tL = %d, m = %d\n\tB(x) = %s\n\ti = %d\n\tdelta = %d\n", i, C_str, L, m, B_str, i, delta);
-		if (delta == 1) {
-			memcpy(T, C, size_n);
-			B_shift = i - m;
-			// We have to xor each element of C with each element of B shifted by B_shift positions right
-			for (k = 0; k < n - B_shift; k++) {
-				// We need to start xoring from the B_shiftth element
-				C[k + B_shift] ^= B[k]; 
-			}
-			if (L <= i/2) {
-				L = i + 1 - L;
-				m = i;
-				memcpy(B, T, size_n);
-			}
-		}
-		i++;
-	}
-
-	// We want a string at the end
-	memcpy(desc, C, size_n);
-	return L;
-}
 
 void usage(char *name) {
 	// TODO

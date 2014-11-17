@@ -18,4 +18,6 @@ void circular_shift_right(char arr[]);
 
 void get_lfsr_output(LFSR *lfsr_in, char *lfsr_output, int howmany);
 
+int bma(int sequence[], int desc[], int n);
+
 #endif
