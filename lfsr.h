@@ -7,16 +7,19 @@
 #include <math.h>
 #include <limits.h>
 
-#define DSIZE 1000000
+#define DSIZE 1024
 
 typedef struct struct_LFSR {
-	char descriptor[DSIZE];
-	char initial_state[DSIZE];
+	int descriptor[DSIZE];
+	int initial_state[DSIZE];
+	int len;
 } LFSR;
 
-void circular_shift_right(char arr[]);
+void print_array(int arr[], int l);
 
-void get_lfsr_output(LFSR *lfsr_in, char *lfsr_output, int howmany);
+void circular_shift_right(int arr[], int len);
+
+void get_lfsr_output(LFSR *lfsr_in, int *lfsr_output, int howmany);
 
 char c2b(char c);
 

@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 	desc[i] = '\0';
 
 	printf("Length: %d\n", l);
-	get_poly_str(desc_int, strlen(desc), desc_poly);
+	get_poly_str(desc_int, l + 1, desc_poly);
 	printf("Connection polynomial: %s (binary: %s)\n", desc_poly, desc);
 
 	return 0;
