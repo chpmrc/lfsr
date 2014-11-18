@@ -147,8 +147,34 @@ int bma(int sequence[], int desc[], int n) {
 
 void print_array(int arr[], int l) {
 	int i = 0;
+	printf("[ ");
 	for (i = 0; i < l; i++) {
-		printf("%d ", arr[i]);
+		printf("%d", arr[i]);
 	}
+	printf(" ]");
 	printf("\n");
 } 
+
+void bits2ascii(int bits[], char ascii[], int n) {
+	int i, j;
+	char byte = 0;
+	for (i = 0; i < n; i += 8) {
+		for (j = 0; j < 8; j++) {
+			if (bits[i + j] == 1) {
+				byte += pow(2, j);
+			}
+		}
+		ascii[i / 8] = byte;
+	}
+	ascii[i] = '\0';
+}
+
+int equals(int a[], int b[], int n) {
+	int i = 0;
+	for (i = 0; i < n; i++) {
+		if (a[i] != b[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}

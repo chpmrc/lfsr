@@ -9,9 +9,11 @@
 #include <limits.h>
 #include "lfsr.h"
 
-#define MAX_SIZE 1024 * 1023
+#define MAX_SIZE 1024
 
-#define BIN_SEQ "000101010110011111010011110010100011101010110111101000111111101010010111011101011001110101110101001010010111111101101000011110110011100101100011111010000000010101101000100011100110101111010000000100110101111010010010101011111011011011100100101001011001111011111101101011110111101101000101000101011010000010011000000001000100001001001001111101100001101110001100010101001101100101111000101101110010011000001100000001100101111111001000000100000100111000100011010000011111111111010101011110010001011011101001110001010011100101011011011111100101000000101110101001101110011011110010111111001000101000100111110010001110001011001001011100101111100010000111100101101101010010110100101010110101011110001010010000111000110101000110010101111010001100001110"
+#define BIN_SEQ {0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0}
+#define SEQ_LEN 744
+#define TEST_LEN 40
 
 void usage(char *name) {
 	// TODO
@@ -27,50 +29,79 @@ int main(int argc, char *argv[]) {
 	 * 5) If so you found the key and the LFSR
 	 */
 
-	char test_str[10] = "AGREE";
-	int test_bits[40] = {0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1};
-	char seq_str[MAX_SIZE] = BIN_SEQ;
-	int seq_int[MAX_SIZE];
-	int sub_seq_int[MAX_SIZE];
-	int test_key_stream[MAX_SIZE];
+	// char test_str[10] = "AGREE";
+	int test_bits[TEST_LEN] = {0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1};
+	int seq_int[SEQ_LEN] = BIN_SEQ;
+	int test_key_stream[TEST_LEN];
 	int test_desc[MAX_SIZE];
 	int test_init_state[MAX_SIZE];
 	int lfsr_output[MAX_SIZE];
-	int i, j, test_num_bits, seq_len, lfsr_len;
+	int i, j, k, test_len, seq_len, lfsr_len, how_many;
+	int plaintex_candidate[MAX_SIZE];
+	// char plaintext_str[MAX_SIZE];
 
-	memset(seq_int, 0, MAX_SIZE);
-	memset(test_desc, 0, MAX_SIZE);
-	test_num_bits = (sizeof(test_str) - 1) * 8; // Number of bits, exclude trailing 0
-	seq_len = strlen(seq_str);
+	test_len = TEST_LEN;
+	seq_len = SEQ_LEN;
 
-	// Convert seq from string to int[]
-	for (i = 0; i < seq_len; i++) {
-		seq_int[i] = c2b(seq_str[i]);
-	}
-	// Advance by one bit at a time
-	for (i = 0; i < seq_len; i++) {
-		// Get a subsequence of bits to test
-		for (j = i; j < i + test_num_bits; j++) {
-			sub_seq_int[j - i] = seq_int[j];
-		}
+	// printf("Sequence: ");
+	// print_array(seq_int, seq_len);
+	// printf("\n");
+
+	// Advance one byte at a time
+	for (i = 0; i < seq_len; i += 8) {
 		// Xor them with the plaintext to find the candidate key stream
-		for (j = 0; j < test_num_bits; ++j)
+		for (j = 0; j < test_len; ++j)
 		{
-			test_key_stream[j] = test_bits[j] ^ sub_seq_int[j]; // kc_i = test_i XOR c_i (bits)
+			test_key_stream[j] = test_bits[j] ^ seq_int[i + j]; // kc_i = test_i XOR c_i (bits)
 		}
+		// print_array(test_key_stream, test_len);
 		// Run BMA on the given key stream and find the LFSR that generates it (discard the too long ones)
-		lfsr_len = bma(test_key_stream, test_desc, test_num_bits);
+		lfsr_len = bma(test_key_stream, test_desc, test_len);
+		if (lfsr_len == 8) {
+			printf("Length: %d\n", lfsr_len);
+			print_array(test_desc, lfsr_len);
+			print_array(test_key_stream, test_len);
+		}
+		// Use the last lfsr_len bits as initial state for the LFSR and see if we can
+		// generate the remainder of the ciphertext
+		// print_array(test_key_stream, test_len);
 		if (lfsr_len <= 20) {
-			LFSR test_lfsr;
-			// Generate a non-null initial state
+			// printf("Descriptor: ");
+			// print_array(test_desc, lfsr_len);
+			// printf("\n");
 			memset(test_init_state, 0, lfsr_len);
-			test_init_state[lfsr_len - 1] = 1;
+			memset(lfsr_output, 0, MAX_SIZE);
+			for (k = 0; k < lfsr_len; k++) {
+				test_init_state[k] = test_key_stream[k + (test_len - lfsr_len)];
+			}
+			// Create the LFSR
+			LFSR test_lfsr;
 			memcpy(test_lfsr.descriptor, test_desc, lfsr_len * sizeof(int));
 			memcpy(test_lfsr.initial_state, test_init_state, lfsr_len * sizeof(int));
 			test_lfsr.len = lfsr_len;
 			// Run the LFSR
-			get_lfsr_output(&test_lfsr, lfsr_output, pow(2, lfsr_len - 1)); // Get the whole damn period and let's brute force this thing!
-			print_array(lfsr_output, pow(2, lfsr_len - 1));
+			how_many = test_len - lfsr_len; // Try to encrypt "GREE"
+			if (how_many > 0 && lfsr_len == 8) {
+				do {
+					printf("LFSR                 : ");
+					print_array(test_lfsr.descriptor, lfsr_len);
+					printf("Testing initial state: ");
+					print_array(test_lfsr.initial_state, lfsr_len);
+					get_lfsr_output(&test_lfsr, lfsr_output, how_many);
+					// XOR with the ciphertext and print the result
+					// Start from the current position in the sequence
+					for (k = i; k < i + how_many; k++) {
+						printf("Xoring %d and %d: %d\n", seq_int[k], lfsr_output[k - i], seq_int[k] ^ lfsr_output[k - i - test_len]);
+						plaintex_candidate[k - i] = seq_int[k] ^ lfsr_output[k - i];
+					}
+					// bits2ascii(plaintex_candidate, plaintext_str, how_many);
+					printf("i: %d, seq_len: %d, how_many: %d\n", i, seq_len, how_many);
+					printf("LFSR output: "); print_array(lfsr_output, how_many);
+					printf("Plaintext  : "); print_array(plaintex_candidate, how_many);
+					// printf("%s\n", plaintext_str);
+					printf("Test bits  : "); print_array(test_bits, test_len);
+				} while (!equals(plaintex_candidate, &(test_bits[8]), test_len - 8));
+			}
 		}
 	}
 

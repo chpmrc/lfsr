@@ -29,6 +29,8 @@ void get_poly_str(int poly[], int n, char buffer[]);
 
 int bma(int sequence[], int desc[], int n);
 
+void bits2ascii(int bits[], char ascii[], int n);
 
+int equals(int a[], int b[], int n);
 
 #endif
