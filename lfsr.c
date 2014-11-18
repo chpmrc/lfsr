@@ -18,6 +18,14 @@ void circular_shift_right(int arr[], int l) {
 	arr[i] = last;
 }
 
+// TOFIX!
+void get_str_bits(char str[], int bits[]) {
+	int i = 0;
+	for (i = 0; i < strlen(str) * 8; i++) {
+		bits[i] = (str[i / 8] << i) & 0x80; // Take the i-th MSB
+	}
+}
+
 /**
  * Run the given LFSR howmany times and store the result as a
  * string into the given char array.
@@ -35,7 +43,7 @@ void get_lfsr_output(LFSR *lfsr_in, int lfsr_output[], int howmany) {
 		period = (howmany > 0)? howmany : best_period,
 		new_digit;
 
-	printf("Best expected period: %d\n", best_period);
+	// printf("Best expected period: %d\n", best_period);
 	j = 0;
 	while (j < period) {
 		for (i = 0, is_first_digit = 1; i < lfsr_len; i++) {
@@ -57,10 +65,6 @@ void get_lfsr_output(LFSR *lfsr_in, int lfsr_output[], int howmany) {
 		lfsr_output[j] = lfsr_state[i - 1];
 		circular_shift_right(lfsr_state, lfsr_len);
 		lfsr_state[0] = new_digit;
-		// printf("State after execution %s\n", lfsr_state);
-		if (j == 0)
-			printf("First digit: %d\n", lfsr_output[j]);
-		// printf("Current digit: %c\n", output_digit_char);
 		j++;
 	}
 }

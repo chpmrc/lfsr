@@ -15,6 +15,8 @@ typedef struct struct_LFSR {
 	int len;
 } LFSR;
 
+void get_str_bits(char str[], int bits[]);
+
 void print_array(int arr[], int l);
 
 void circular_shift_right(int arr[], int len);
@@ -26,6 +28,7 @@ char c2b(char c);
 void get_poly_str(int poly[], int n, char buffer[]);
 
 int bma(int sequence[], int desc[], int n);
+
 
 
 #endif
