@@ -30,10 +30,12 @@ void get_str_bits(char str[], int bits[]) {
  * Run the given LFSR howmany times and store the result as a
  * string into the given char array.
  */
-void get_lfsr_output(LFSR *lfsr_in, int lfsr_output[], int howmany) {
+int get_lfsr_output(LFSR *lfsr_in, int lfsr_output[], int howmany) {
 	int *lfsr_descriptor = lfsr_in->descriptor,
 		*lfsr_state = lfsr_in->initial_state,
 		lfsr_len = lfsr_in->len;
+	printf("STATE: ");
+	print_array(lfsr_state, lfsr_len);
 	unsigned int j;
 	int i = 0,
 		is_first_digit,
@@ -65,8 +67,10 @@ void get_lfsr_output(LFSR *lfsr_in, int lfsr_output[], int howmany) {
 		lfsr_output[j] = lfsr_state[i - 1];
 		circular_shift_right(lfsr_state, lfsr_len);
 		lfsr_state[0] = new_digit;
+		print_array(lfsr_state, lfsr_len);
 		j++;
 	}
+	return period;
 }
 
 char c2b(char c) {

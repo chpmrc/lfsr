@@ -21,7 +21,7 @@ void print_array(int arr[], int l);
 
 void circular_shift_right(int arr[], int len);
 
-void get_lfsr_output(LFSR *lfsr_in, int *lfsr_output, int howmany);
+int get_lfsr_output(LFSR *lfsr_in, int *lfsr_output, int howmany);
 
 char c2b(char c);
 
