@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 			memcpy(test_lfsr.initial_state, test_init_state, lfsr_len * sizeof(int));
 			test_lfsr.len = lfsr_len;
 			// Run the LFSR
-			how_many = 40; // seq_len - i - test_len; // Try to encrypt "GREE"
+			how_many = 40; // seq_len - i - test_len;
 			if (how_many > 0 && lfsr_len == 8) {
 				printf("LFSR                 : ");
 				print_array(test_lfsr.descriptor, lfsr_len);
@@ -97,7 +97,6 @@ int main(int argc, char *argv[]) {
 					// printf("Xoring %d and %d: %d\n", seq_int[k], lfsr_output[k - i], seq_int[k] ^ lfsr_output[k - i - test_len]);
 					plaintex_candidate[k] = seq_int[i + how_many] ^ lfsr_output[k];
 				}
-				// bits2ascii(plaintex_candidate, plaintext_str, how_many);
 				printf("i: %d, seq_len: %d, how_many: %d\n", i, seq_len, how_many);
 				printf("LFSR output: "); print_array(lfsr_output, how_many);
 				printf("Plaintext  : "); print_array(plaintex_candidate, how_many);
