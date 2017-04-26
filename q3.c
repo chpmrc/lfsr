@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
 	// char test_str[10] = "AGREE";
 	int test_bits[TEST_LEN] = {1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0};
-	int seq_int[SEQ_LEN] = BIN_SEQ;
+	int seq_int[SEQ_LEN*TEST_LEN] = BIN_SEQ;
 	int test_key_stream[TEST_LEN];
 	int test_desc[MAX_SIZE];
 	int test_init_state[MAX_SIZE];
